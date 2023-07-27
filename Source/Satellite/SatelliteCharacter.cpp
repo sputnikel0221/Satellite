@@ -53,7 +53,7 @@ ASatelliteCharacter::ASatelliteCharacter()
 	{
 		GetMesh()->SetSkeletalMesh(SK_GADGET.Object);
 	}
-	GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -95.0f), FRotator(0.0f, -90.0f, 0.0f));
+	GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -100.0f), FRotator(0.0f, -90.0f, 0.0f));
 }
 
 void ASatelliteCharacter::BeginPlay()
@@ -88,24 +88,12 @@ void ASatelliteCharacter::RightLeft(float RLValue)
 
 void ASatelliteCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
-	// Set up action bindings
-	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent)) {
-		
-		//Jumping
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ACharacter::Jump);
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
+	// 새로 만든 입력
+	PlayerInputComponent->BindAction(TEXT("Jump"), EInputEvent::IE_Pressed, this, &ACharacter::Jump);
 
-		//Moving
-		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ASatelliteCharacter::Move);
+	PlayerInputComponent->BindAxis(TEXT("UpDown"), this, &ASatelliteCharacter::UpDown);
+	PlayerInputComponent->BindAxis(TEXT("RightLeft"), this, &ASatelliteCharacter::RightLeft);
 
-		//Looking
-		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ASatelliteCharacter::Look);
-
-
-		// 새로 만든 입력
-		PlayerInputComponent->BindAxis(TEXT("UpDown"), this, &ASatelliteCharacter::UpDown);
-		PlayerInputComponent->BindAxis(TEXT("RightLeft"), this, &ASatelliteCharacter::RightLeft);
-	}
 
 }
 
