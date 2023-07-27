@@ -39,7 +39,7 @@ ASatelliteCharacter::ASatelliteCharacter()
 	// Create a camera boom (pulls in towards the player if there is a collision)
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
 	SpringArm->SetupAttachment(RootComponent);
-	SpringArm->TargetArmLength = 400.0f; // The camera follows at this distance behind the character	
+	SpringArm->TargetArmLength = 350.0f; // The camera follows at this distance behind the character	
 	SpringArm->bUsePawnControlRotation = true; // Rotate the arm based on the controller
 
 	// Create a follow camera
@@ -62,6 +62,7 @@ void ASatelliteCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	//Add Input Mapping Context
+	/*
 	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
 	{
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
@@ -69,6 +70,23 @@ void ASatelliteCharacter::BeginPlay()
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
 	}
+	*/
+
+}
+
+//////////////////////////////////////////////////////////////////////////
+// Input
+
+void ASatelliteCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
+{
+	// 새로 만든 입력
+	PlayerInputComponent->BindAction(TEXT("Jump"), EInputEvent::IE_Pressed, this, &ACharacter::Jump);
+
+	PlayerInputComponent->BindAxis(TEXT("UpDown"), this, &ASatelliteCharacter::UpDown);
+	PlayerInputComponent->BindAxis(TEXT("RightLeft"), this, &ASatelliteCharacter::RightLeft);
+
+	PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &ASatelliteCharacter::LookUp);
+	PlayerInputComponent->BindAxis(TEXT("Turn"), this, &ASatelliteCharacter::Turn);
 }
 
 void ASatelliteCharacter::UpDown(float UDValue)
@@ -83,20 +101,19 @@ void ASatelliteCharacter::RightLeft(float RLValue)
 	AddMovementInput(FRotationMatrix(GetControlRotation()).GetUnitAxis(EAxis::Y), RLValue);
 }
 
-//////////////////////////////////////////////////////////////////////////
-// Input
-
-void ASatelliteCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
+void ASatelliteCharacter::LookUp(float MouseValue)
 {
-	// 새로 만든 입력
-	PlayerInputComponent->BindAction(TEXT("Jump"), EInputEvent::IE_Pressed, this, &ACharacter::Jump);
-
-	PlayerInputComponent->BindAxis(TEXT("UpDown"), this, &ASatelliteCharacter::UpDown);
-	PlayerInputComponent->BindAxis(TEXT("RightLeft"), this, &ASatelliteCharacter::RightLeft);
-
-
+	AddControllerPitchInput(MouseValue);
 }
 
+void ASatelliteCharacter::Turn(float MouseValue)
+{
+	AddControllerYawInput(MouseValue);
+}
+
+
+
+/*
 void ASatelliteCharacter::Move(const FInputActionValue& Value)
 {
 	// input is a Vector2D
@@ -119,7 +136,9 @@ void ASatelliteCharacter::Move(const FInputActionValue& Value)
 		AddMovementInput(RightDirection, MovementVector.X);
 	}
 }
+*/
 
+/* 쓸지도 모르겠다..
 void ASatelliteCharacter::Look(const FInputActionValue& Value)
 {
 	// input is a Vector2D
@@ -132,6 +151,7 @@ void ASatelliteCharacter::Look(const FInputActionValue& Value)
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
 }
+*/
 
 
 

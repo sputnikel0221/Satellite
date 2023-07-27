@@ -41,16 +41,6 @@ class ASatelliteCharacter : public ACharacter
 public:
 	ASatelliteCharacter();
 	
-
-protected:
-
-	/** Called for movement input */
-	void Move(const FInputActionValue& Value);
-
-	/** Called for looking input */
-	void Look(const FInputActionValue& Value);
-			
-
 protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -68,5 +58,7 @@ public:
 private:
 	void UpDown(float UDValue);
 	void RightLeft(float RLValue);
+	void LookUp(float MouseValue);
+	void Turn(float MouseValue);
 };
 
