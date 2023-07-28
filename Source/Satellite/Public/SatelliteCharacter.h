@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include "Satellite.h"
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
 #include "SatelliteCharacter.generated.h"
@@ -60,5 +60,11 @@ private:
 	void RightLeft(float RLValue);
 	void LookUp(float MouseValue);
 	void Turn(float MouseValue);
+
+
+private:
+	float PawnDirection;
+public:
+	float GetDirection();
 };
 
