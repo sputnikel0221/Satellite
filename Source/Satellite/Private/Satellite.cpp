@@ -1,8 +1,8 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
+ï»¿// Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "Satellite.h"
 #include "Modules/ModuleManager.h"
 
-DEFINE_LOG_CATEGORY(Satellite); //ÇØ´ç ÄÚµå±îÁö ÀÛ¼ºÇØ¾ßÇÑ´Ù.
+DEFINE_LOG_CATEGORY(Satellite); //í•´ë‹¹ ì½”ë“œê¹Œì§€ ìž‘ì„±í•´ì•¼í•œë‹¤.
 IMPLEMENT_PRIMARY_GAME_MODULE( FDefaultGameModuleImpl, Satellite, "Satellite" );
  

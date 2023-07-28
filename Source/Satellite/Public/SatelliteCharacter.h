@@ -66,5 +66,6 @@ private:
 	float PawnDirection;
 public:
 	float GetDirection();
+
 };
 

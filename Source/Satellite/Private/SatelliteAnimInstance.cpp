@@ -1,37 +1,74 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "SatelliteAnimInstance.h"
 #include "SatelliteCharacter.h"
+#include "SPController.h"
+#include "TimerManager.h"
 
 USatelliteAnimInstance::USatelliteAnimInstance()
 {
 	CurrentPawnSpeed = 0.0f;
 	CurrentPawnDirection = 0.0f;
-	IsInAir = false;
+	bIsInAir = false;
+	
+	//bWasInAir = false;
 }
 
 void USatelliteAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
+
+	/// Animationì— ì‚¬ìš©ë  ë³€ìˆ˜ë“¤ ì´ˆê¸°í™”
 	APawn* Pawn = TryGetPawnOwner();
 	if (!IsValid(Pawn))
 	{
 		return;
 	}
 
-	// Mesh¿¡ AnimInstance°¡ Àû¿ëµÈ PawnÀ¸·ÎºÎÅÍ °ªÀ» °¡Á®¿È
+	// Meshì— AnimInstanceê°€ ì ìš©ëœ Pawnìœ¼ë¡œë¶€í„° ê°’ì„ ê°€ì ¸ì˜´
 	CurrentPawnSpeed = Pawn->GetVelocity().Size();
 
 
-	// IsInAir´Â Movement¿¡¼­ °¡Á®¿Ã ¼ö ÀÖ´Ù.
-	// GetDirectionÀ¸·Î angleÀ» °¡Á®¿Â´Ù.
+	// IsInAirëŠ” Movementì—ì„œ ê°€ì ¸ì˜¬ ìˆ˜ ìˆë‹¤.
+	// GetDirectionìœ¼ë¡œ angleì„ ê°€ì ¸ì˜¨ë‹¤.
 	ASatelliteCharacter* Character = Cast<ASatelliteCharacter>(Pawn);
 	if (Character)
 	{
-		IsInAir = Character->GetMovementComponent()->IsFalling();
+		bIsInAir = Character->GetMovementComponent()->IsFalling();
 		CurrentPawnDirection = Character->GetDirection();
-		D2_LOG(Warning, TEXT("Angle is : %f"), CurrentPawnDirection);
+		//D2_LOG(Warning, TEXT("Angle is : %f"), CurrentPawnDirection);
+
+		/// ì í”„í›„ ì°©ì§€ì‹œ, ë©ˆì¶¤ êµ¬í˜„
+		// bIsInAir ê°’ì´ trueì—ì„œ falseê°€ ë  ë•Œ ì…ë ¥ì„ ë¹„í™œì„±í™”í•˜ë„ë¡ ì²˜ë¦¬
+		if (bWasInAir && !bIsInAir)
+		{
+			D2_LOG(Error, TEXT("Jump Landing"));
+			//Timerí˜¸ì¶œ
+			auto SPController = Cast<ASPController>(Character->GetOwner());
+			if (SPController)
+			{
+				// ë¨¼ì € ì…ë ¥ì„ ë¹„í™œì„±í™”
+				Character->DisableInput(SPController);
+
+				// Timerë¥¼ í†µí•´ í•´ë‹¹ ì´ˆ ë’¤ì— enableë¡œ ë°”ê¿”ë†“ìŒ
+				GetWorld()->GetTimerManager().SetTimer(
+					InputDisableTimerHandle,
+					FTimerDelegate::CreateLambda(
+						[this]()->void {
+							APawn* Pawn = TryGetPawnOwner();
+							ASatelliteCharacter* Character = Cast<ASatelliteCharacter>(Pawn);
+							auto SPController = Cast<ASPController>(Character->GetOwner());
+							Character->EnableInput(SPController);
+						}), 0.18f, false);
+
+				// Timerí•´ì œ
+				InputDisableTimerHandle.Invalidate();
+			}
+		}
+
+		bWasInAir = bIsInAir;
 	}
 
 
 }
+

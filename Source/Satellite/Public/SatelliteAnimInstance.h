@@ -23,5 +23,17 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllowPrivateAccess = true))
 		float CurrentPawnDirection;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllowPrivateAccess = true))
-		bool IsInAir;
+		bool bIsInAir;
+
+
+protected:
+	FTimerHandle InputDisableTimerHandle;
+	bool bWasInAir;
+	bool bCanReceiveInput = true;
+
+	// 입력을 비활성화하는 함수
+	void DisableInput();
+
+	// 입력을 다시 활성화하는 함수
+	void EnableInput();
 };
