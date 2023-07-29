@@ -64,8 +64,17 @@ private:
 
 private:
 	float PawnDirection;
+	float PawnPitch;
 public:
 	float GetDirection();
+	float GetPitch();
 
+
+private:
+UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+		bool IsAttacking;
+
+private:
+	void CameraManagerHandle();
 };
 

@@ -2,6 +2,8 @@
 
 #include "SatelliteCharacter.h"
 #include "SatelliteAnimInstance.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "Camera/PlayerCameraManager.h"
 
 // 기존에 추가되어있던 헤더
 #include "Camera/CameraComponent.h"
@@ -73,12 +75,15 @@ ASatelliteCharacter::ASatelliteCharacter()
 	}
 
 	PawnDirection = 0.0f;
+	PawnPitch = 0.0f;
 }
 
 void ASatelliteCharacter::BeginPlay()
 {
 	// Call the base class  
 	Super::BeginPlay();
+
+	CameraManagerHandle();
 
 
 }
@@ -129,6 +134,49 @@ float ASatelliteCharacter::GetDirection()
 	}
 	return AngleDegree;
 }
+
+
+/// pitch 각도값만 계산하는 함수
+float ASatelliteCharacter::GetPitch()
+{
+	// 1. Character의 Controller 가져오기
+	AController* PlayerController = Cast<APlayerController>(GetController());
+
+	if (PlayerController)
+	{
+		// 2. Controller의 Pitch 값 가져오기
+		FRotator ControllerRotation = PlayerController->GetControlRotation();
+		PawnPitch = ControllerRotation.Pitch;
+
+		if (PawnPitch >= 270)
+		{
+			PawnPitch -= 360.0f;
+		}
+
+		return PawnPitch;
+	}
+
+	// Controller가 없는 경우 0을 반환
+	return 0.0f;
+}
+
+/// PlayerCameraManager를 통해서 실제 카메라의 pitch범위를 정한다.
+void ASatelliteCharacter::CameraManagerHandle()
+{
+	AController* PlayerController = Cast<APlayerController>(GetController());
+	if (PlayerController)
+	{
+		APlayerCameraManager* CameraManager =
+			Cast<APlayerCameraManager>(UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0));
+		if (CameraManager)
+		{
+			CameraManager->ViewPitchMax = 45.0f;
+			CameraManager->ViewPitchMin = -45.0f;
+		}
+	}
+
+}
+
 
 
 // 컨트롤러가 위,아래로 보는 입력을 실행

@@ -25,6 +25,9 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllowPrivateAccess = true))
 		bool bIsInAir;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllowPrivateAccess = true))
+		bool bStartMontage;
+
 
 protected:
 	FTimerHandle InputDisableTimerHandle;
@@ -36,4 +39,15 @@ protected:
 
 	// 입력을 다시 활성화하는 함수
 	void EnableInput();
+
+private:
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+		UAnimMontage* JumpLandMontage;
+public:
+	void PlayJumpLandMontage();
+
+
+private:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllowPrivateAccess = true))
+		float CurrentPawnPitch;
 };
