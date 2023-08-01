@@ -21,7 +21,6 @@ class ASatelliteCharacter : public ACharacter
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FollowCamera;
 	
-
 	/** MappingContext */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputMappingContext* DefaultMappingContext;
@@ -76,5 +75,9 @@ UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (All
 
 private:
 	void CameraManagerHandle();
+
+private:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "IK_Foot", meta = (AllowPrivateAccess = "true"))
+		class USPFootIK* FootComponent;
 };
 

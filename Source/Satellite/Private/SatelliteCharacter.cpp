@@ -4,6 +4,7 @@
 #include "SatelliteAnimInstance.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Camera/PlayerCameraManager.h"
+#include "SPFootIK.h"
 
 // 기존에 추가되어있던 헤더
 #include "Camera/CameraComponent.h"
@@ -76,6 +77,9 @@ ASatelliteCharacter::ASatelliteCharacter()
 
 	PawnDirection = 0.0f;
 	PawnPitch = 0.0f;
+
+
+	// 실패.. FootComponent = CreateDefaultSubobject<USPFootIK>(TEXT("CHARACTERSTAT"));
 }
 
 void ASatelliteCharacter::BeginPlay()
