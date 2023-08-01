@@ -76,8 +76,5 @@ UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (All
 private:
 	void CameraManagerHandle();
 
-private:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "IK_Foot", meta = (AllowPrivateAccess = "true"))
-		class USPFootIK* FootComponent;
 };
 
